@@ -88,6 +88,23 @@ public class CounselServiceTest {
 
     @Test
     void Should_ReturnUpdatedResponseOfExistCounselEntity_When_RequestUpdateExistCounselInfo(){
+        Long findId = 1L;
 
+        Counsel entity = Counsel.builder()
+                .counselId(1L)
+                .name("Memeber Kim")
+                .build();
+
+        CounselDTO.Request request = CounselDTO.Request.builder()
+                .name("Memeber Kang")
+                .build();
+
+        when(counselRepository.save(ArgumentMatchers.any(Counsel.class))).thenReturn(entity);
+        when(counselRepository.findById(findId)).thenReturn(Optional.ofNullable(entity));
+
+        CounselDTO.Response actual = counselService.update(findId, request);
+
+        assertThat(actual.getCounselId()).isSameAs(findId);
+        assertThat(actual.getName()).isSameAs(request.getName());
     }
 }
